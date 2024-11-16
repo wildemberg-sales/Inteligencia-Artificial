@@ -1,0 +1,22 @@
+site_name: Portifólios Inteligência Artificial
+site_url: ""
+
+site_dir: public
+theme:
+  name: material
+  features:
+    - content.code.annotate
+    - content.tabs.link
+    - header.autohide
+    - navigation.instant
+    - navigation.sections
+    - navigation.tabs
+    - navigation.top
+    - navigation.tracking
+extra_css:
+  - stylesheets/styles.css
+nav:
+  - Home: 
+    - Sobre os Portifólios: index.md
+  - Portifólio 1: portifolios/portifolio1.md
+
