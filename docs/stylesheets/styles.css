@@ -27,11 +27,12 @@
 
 /* Customização das tabelas */
 .md-typeset table:not([class]) th {
-    background-color: #C11C44;
+    background-color: #3E6192;
+    color: white;
 }
 
 tr:nth-child(odd) {
-    background-color: #c8c8c8;
+    background-color: #f2f2f2;
 }
 
 th {
