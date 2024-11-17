@@ -1,8 +1,23 @@
 # Inteligência Artificial em Aspectos Gerais e uma Visão Macro sobre Agentes Inteligentes
 
+---
+
+**Autor:** Wildemberg Sales da Silva Junior
+
+**Matrícula:** 202017503
+
+**Data:** 19/11/2024
+
+**Instituição/Universidade:** Universidade de Brasília(UnB)
+
+**Disciplina:** Inteligência Artificial - FGA0221
+
+---
+
 ## Resumo
 
 Este artigo oferece uma visão abrangente sobre a Inteligência Artificial (IA), abordando sua origem, os fundamentos que definem o modelo padrão, as características essenciais para a definição de inteligência e IA, além da concepção de agentes inteligentes. Foram explorados os modelos e conceitos clássicos do pensamento, com o objetivo de compreender como as IAs devem agir, investigando as características do pensamento humano e racional. Aprofundamos a análise para definir o que são agentes inteligentes, suas principais características e seu papel dentro dos ambientes em que atuam, destacando como as propriedades do ambiente podem influenciar o comportamento de um agente. Por fim, discutimos alguns dos tipos de agentes existentes, suas atuações e aplicações.
+
 
 ## Introdução
 
@@ -326,3 +341,27 @@ A representação estruturada é definida como a mais complexa entre as 3 repres
 Baseado em tudo que vimos até o presente momento, obtivemos uma visão abstrata e detalhada sobre o que é Inteligência Artifical, modelos e conceitos do que gera a definição final de um agente inteligente e como foi gerado o modelo padrão de IA, também analisamos riscos, benefícios e implementações da IA no mundo atual, entendendo seus prós e contras em cada exemplo formando opiniões sobre seus usos. Após entender os conceitos mais básicos sobre IA, nos aprofundamos no assunto de agentes, onde conseguimos ter uma visão ampliada do que são agentes, suas características e propriedades, o ambiente em que atuam e as propriedades de um ambiente que influenciam o comportamento e a modelagem de um agente, fazendo com que entedessemos sobre a arquitetura do agente, vimos um pouco dos tipos de agentes existentes com suas características e aplicações, fazendo com que pudessemos compreender como tarefas simples e complexas são realizadas por agentes, e por fim entendemos os estados de um agente.
 
 Após toda esse estudo e análise realizada neste artigo, podemos concluir que IA's são entidades complexas que possuem muitos viés em suas definições e conceitos, algumas formas abstratas de IA podem ser utilizadas para resolver grandes e ou extensos problemas do mundo atual, entender seus riscos e benefícios em exemplos de aplicações nos trouxe certezas e dúvidas sobre sua utilização do dia a dia, onde essas dúvidas devem ser exploradas e analisadas para uma melhor compreenssão sobre os assuntos. Entender sobre agentes e seus ambientes nos fez perceber que, gerar um agente inteligente não é algo simples, e que deve ser feito uma análise detalhada do ambiente em que ele agirá.
+
+## Referências
+
+- RUSSELL, Stuart; NORVIG, Peter. *Inteligência Artificial: Uma Abordagem Moderna* – 3ª edição. 
+
+- INTELIGÊNCIA. *Wikipedia*. Disponível em: [https://pt.wikipedia.org/wiki/Intelig%C3%AAncia#cite_note-etimo-intelecto-3](https://pt.wikipedia.org/wiki/Intelig%C3%AAncia#cite_note-etimo-intelecto-3). Acesso em: 16/11/2024.
+
+- IBM. *O que é Inteligência Artificial?* Disponível em: [https://www.ibm.com/br-pt/topics/artificial-intelligence](https://www.ibm.com/br-pt/topics/artificial-intelligence). Acesso em: 16/11/2024.
+
+- MICROSOFT AZURE. *O que é Inteligência Artificial?* Disponível em: [https://azure.microsoft.com/pt-pt/resources/cloud-computing-dictionary/what-is-artificial-intelligence/?msockid=1ba5124451126d4f0d22076c50a36c8d#ve%C3%ADculos-de-condu%C3%A7%C3%A3o-aut%C3%B4noma](https://azure.microsoft.com/pt-pt/resources/cloud-computing-dictionary/what-is-artificial-intelligence/?msockid=1ba5124451126d4f0d22076c50a36c8d#ve%C3%ADculos-de-condu%C3%A7%C3%A3o-aut%C3%B4noma). Acesso em: 16/11/2024.
+
+- TECNOBLOG. *História da Inteligência Artificial: Quem criou e como surgiu a tecnologia revolucionária*. Disponível em: [https://tecnoblog.net/responde/historia-da-inteligencia-artificial-quem-criou-e-como-surgiu-a-tecnologia-revolucionaria/](https://tecnoblog.net/responde/historia-da-inteligencia-artificial-quem-criou-e-como-surgiu-a-tecnologia-revolucionaria/). Acesso em: 16/11/2024.
+
+- ICHI.PRO. *Neurônio McCulloch-Pitts: O Primeiro Modelo Matemático de um Neurônio Biológico da Humanidade*. Disponível em: [https://ichi.pro/pt/neuronio-mcculloch-pitts-o-primeiro-modelo-matematico-de-um-neuronio-biologico-da-humanidade-105413088140753](https://ichi.pro/pt/neuronio-mcculloch-pitts-o-primeiro-modelo-matematico-de-um-neuronio-biologico-da-humanidade-105413088140753). Acesso em: 16/11/2024.
+
+- LEMES, Nelson. *Neurônio de McCulloch-Pitts*. UNIFAL-MG. Disponível em: [https://pessoas.unifal-mg.edu.br/nelsonlemes/neuronio-de-mcculloch-pitts/#:~:text=Em%201943%2C%20W.%20McCulloch%20e%20W.%20Pitts%20desenvolveram,um%20para%20a%20teoria%20de%20Redes%20Neurais%20Artificiais](https://pessoas.unifal-mg.edu.br/nelsonlemes/neuronio-de-mcculloch-pitts/#:~:text=Em%201943%2C%20W.%20McCulloch%20e%20W.%20Pitts%20desenvolveram,um%20para%20a%20teoria%20de%20Redes%20Neurais%20Artificiais). Acesso em: 16/11/2024.
+
+- ACERVO LIMA. *Tipos de Ambientes em IA*. Disponível em: [https://acervolima.com/tipos-de-ambientes-em-ia/#:~:text=Determin%C3%ADstico%20vs%20Estoc%C3%A1stico%20Quando%20uma%20exclusividade%20no%20estado,e%20n%C3%A3o%20pode%20ser%20completamente%20determinado%20pelo%20agente](https://acervolima.com/tipos-de-ambientes-em-ia/#:~:text=Determin%C3%ADstico%20vs%20Estoc%C3%A1stico%20Quando%20uma%20exclusividade%20no%20estado,e%20n%C3%A3o%20pode%20ser%20completamente%20determinado%20pelo%20agente). Acesso em: 17/11/2024.
+
+- AMAZON WEB SERVICES (AWS). *O que são Agentes de IA?* Disponível em: [https://aws.amazon.com/pt/what-is/ai-agents/](https://aws.amazon.com/pt/what-is/ai-agents/). Acesso em: 17/11/2024.
+
+- ALL ABOUT AI. *Tipos de Agentes de IA*. Disponível em: [https://www.allaboutai.com/pt-br/agentes-de-ia/tipos/](https://www.allaboutai.com/pt-br/agentes-de-ia/tipos/). Acesso em: 17/11/2024.
+
+- IBM THINK. *Agentes de IA*. Disponível em: [https://www.ibm.com/br-pt/think/topics/ai-agents](https://www.ibm.com/br-pt/think/topics/ai-agents). Acesso em: 17/11/2024.
