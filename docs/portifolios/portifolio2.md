@@ -21,10 +21,10 @@
 \newpage
 
 ## Resumo
-resumo do artigo
+Este artigo aborda temas relacionados a soluções de problemas por meio de buscas realizadas por agentes inteligentes. Foi explorado o que são agentes de resolução de problemas e como eles atuam na busca de soluções, analisando as características e propriedades dos ambientes em que esses modelos de agentes atuam. Também obtivemos uma visão geral sobre algoritmos de buscas, desde sistemáticos, até em ambientes complexos, vendo suas aplicações em problemas reais, e explorando novos modelos de algoritmos não discutidos. Por fim, analisamos algoritmos genéticos que é um pilar importante no conceito de busca por agentes.
 
 ## Visão Geral
-Visão geral do artigo
+Este artigo traz informações relevantes para o estudo de Inteligência Artificial, pois aborda um tema muito utilizado no dia a dia que é a busca, todos os dias realizamos diversos tipos de buscas e em diferentes situações, então entender esses tipos de agentes inteligentes e os modelos de algoritmos, agrega um valor muito valioso, pois expande o pensamento e a visão de implementações em que pode ser utilizado esses agentes.
 
 \newpage
 
@@ -142,52 +142,309 @@ Dentro deste modelo de busca cega, temos alguns submodelos que possuem caracter�
 * **Busca de Bidirecional:** Este modelo aplica uma lógica de encontro de buscas, onde a sua busca é iniciada em dois lugares, uma na raiz da árvore e uma no objetivo, e essas buscas devem se encontrar em um caminho intermediário.
 * **Busca de Profundidade Limitada:** Este modelo é o mesmo do de busca em profundidade, a diferença entre eles é que este modelo tem um limite de nível, onde caso ele chegue a esse limite, ele volta um nível e contiua sua busca. De forma simples, é como se fosse definido onde é o "final" da árvore.
 
-### Algoritmo desenvolvido de busca cega
-Um dos algoritmos não discutidos em sala de aula é o de busca de profundidade limitada que pode ser encontrada em RUSSELL, Stuart; NORVIG, Peter. *Inteligência Artificial: Uma Abordagem Moderna*, página 123. O algoritmo base para implementação do *código 3* pode ser encontrado no mesmo livro na figura 3.17, páginas 120 e 121. Esse algoritmo apresenta a modelagem do método de busca de profundidade limitada.
+Agora que entendemos alguns dos modelos existentes de algoritmos de busca cega, podemos agora pensar em um exemplo onde a aplicação deste modelo pode ser eficiente.
+
+**Exemplo**: Imagine que temos um labirinto para percorrer, e neste labirinto há somente uma saída, para isso temos um agente que irá percorrer o labirinto em busca da saída. Podemos pensar de três modos com este problema, o primeiro onde o agente deve encontrar o melhor caminho para chegar a saída, e o outro onde o agente deve encontrar a saída o mais rápido possível, nestes dois exemplos, podemos citar na mesma ordem três algoritmos para chegar a esses objetivos, o primeiro seria o de busca em largura para o primeiro objetivo de melhor caminho, onde o agente iria percorrer todas as rotas possíveis do labirinto para descobrir qual a melhor rota, e o segundo seria a de busca em profundidade e a busca bidirecional, onde o agente assim que encontrasse a saída concluiria seu objetivo.
+
+A seguir no *código 3* podemos ver a implementação do algoritmo de busca bidirecional, aplicado ao exemplo desenvolvido anteriormente.
 
 ````python
-def busca_em_profundidade_limitada(problema, limite):
-    return bpl_recursiva(problema, limite)
+from collections import deque
 
-def bpl_recursiva(problema, limite):
-    if is_goal(problema):
-        return problema
-    elif limite == 0:
-        return "corte"
-    else:
-        corte_ocorrido = False
-        for filho in expand(problema):
-            resultado = bpl_recursiva(filho, limite - 1)
-            if resultado == "corte":
-                corte_ocorrido = True
-            elif resultado is not None:
-                return resultado
-        return "corte" if corte_ocorrido else None
+def bidirectional_search(labyrinth, start, goal):
+    def get_neighbors(position):
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        neighbors = []
+        for dx, dy in directions:
+            nx, ny = position[0] + dx, position[1] + dy
+            if 0 <= nx < len(labyrinth) and 0 <= ny < len(labyrinth[0]) and labyrinth[nx][ny] != 1:
+                neighbors.append((nx, ny))
+        return neighbors
+
+    # Frontiers and visited sets for both searches
+    frontier_start = deque([start])
+    frontier_goal = deque([goal])
+    visited_start = {start: None}  # Keeps track of visited nodes and predecessors
+    visited_goal = {goal: None}
+
+    while frontier_start and frontier_goal:
+        # Expand the frontier from the start side
+        current_start = frontier_start.popleft()
+        for neighbor in get_neighbors(current_start):
+            if neighbor not in visited_start:
+                visited_start[neighbor] = current_start
+                frontier_start.append(neighbor)
+
+                if neighbor in visited_goal:  # Intersection found
+                    return reconstruct_path(neighbor, visited_start, visited_goal)
+
+        # Expand the frontier from the goal side
+        current_goal = frontier_goal.popleft()
+        for neighbor in get_neighbors(current_goal):
+            if neighbor not in visited_goal:
+                visited_goal[neighbor] = current_goal
+                frontier_goal.append(neighbor)
+
+                if neighbor in visited_start:  # Intersection found
+                    return reconstruct_path(neighbor, visited_start, visited_goal)
+
+    return None  # No path found
+
+def reconstruct_path(meeting_point, visited_start, visited_goal):
+    # Reconstruct path from start to meeting point
+    path_start = []
+    current = meeting_point
+    while current is not None:
+        path_start.append(current)
+        current = visited_start[current]
+
+    # Reconstruct path from goal to meeting point
+    path_goal = []
+    current = visited_goal[meeting_point]
+    while current is not None:
+        path_goal.append(current)
+        current = visited_goal[current]
+
+    return path_start[::-1] + path_goal  # Combine both parts
+
+# Example labyrinth (0 = free space, 1 = wall)
+labyrinth = [
+    [0, 0, 1, 0, 0],
+    [1, 0, 1, 0, 1],
+    [0, 0, 0, 0, 0],
+    [0, 1, 1, 1, 0],
+    [0, 0, 0, 1, 0]
+]
+
+start = (0, 0)  # Starting point
+goal = (4, 4)   # Goal point
+
+path = bidirectional_search(labyrinth, start, goal)
+if path:
+    print("Path found:", path)
+else:
+    print("No path found.")
+
 ````
-<figcaption align="center"><b>Código 3</b>: Implementação do algoritmo de busca de profundidade limitada.</figcaption>
+<figcaption align="center"><b>Código 3</b>: Implementação do algoritmo de busca bidirecional aplicada ao exemplo anterior, Fonte: OPENAI. Assistente Virtual ChatGPT, 2024</figcaption>
 
 ### Busca Informada
-A busca informada se dá quando o agente tem informações a mais sobre o ambiente e os estados que ele pode possuir ou possui. De forma simplificada podemos pensar na idéia de ir de uma cidade a outra com um mapa, onde o agente teria as informações sobre os caminhos que ele pode percorrer como distância, desvios, problemas e etc.
+A busca informada de acordo com RUSSEL e NORVIG, 2010, é a que utiliza conhecimento de um problema específico além da definição do problema em si — pode encontrar soluções de forma mais eficiente do que uma estratégia de busca sem informação.
 
+Esse modelo de busca se dá quando o agente tem informações a mais sobre o ambiente e os estados que ele pode possuir ou possui, os modelos pertencente a busca informada se utilizam de funções heurísticas, funções para medição do quão "longe" está um nó da solução, para avaliar os caminhos com o menos custo baseado nas informações do problema. De forma simplificada podemos pensar na ideia de ir de uma cidade a outra com um mapa, onde o agente teria as informações sobre os caminhos que ele pode percorrer como distância, desvios, problemas e etc, e baseado nessas informações ele poderia calcular a rota com o menor custo para ele.
 
-### Algoritmo desenvolvido de busca informada
-### Algoritmo não discutido em sala
+A seguir iremos explorar alguns modelos de busca informada para entendermos melhor e nos aprofundarmos no assunto:
 
-## Funções Heurísticas
+* **Busca Gulosa de Melhor Escolha:** Esse modelo se utiliza da função heurística para escolher o próximo nó a ser expandido na árvore de busca, se baseando nos nós futuros que parecem estar mais próximo do objetivo, não contabilizando o caminho já percorrido;
+* **Busca A\*:** Realiza a mesma função da busca gulosa, mas com um diferencial que é a contabilização do caminho percorrido até o nó atual, fazendo com que a função heurística possua esse parâmetro para o cálculo do próximo nó a ser expandido; 
+* **Busca Iterativa de Aprofundamento com A\* (IDA\*):** Esse modelo é uma variação do A*, onde é aplicado a ideia de limite de profundidade, onde o modelo realiza a busca até esse limite imposto, e se não encontrar o objetivo, ele modifica o limite para o menor valor da função heurística já encontrado que excedeu o limite anterior, e repete sua busca;
+* **Busca Recursiva de Melhor Escolha (RBFS):** Baseado no modelo de A*, se utiliza do mesmo princípio, mas trabalha de modo recursivo em sua abordagem, fazendo com que toda vez que chegue em um limite de uma ramificação, ele retorna e recalcula o limite.
+* **Busca Heurística Bidirecional:** Funciona de maneira similar a busca bidirecional de busca cega, onde são realizadas duas buscas simultaneamente, uma partindo da raiz e outra partindo do objetivo, e ambas as buscas utilizam heurísticas específicas, para que ambas as buscas se encontrem no meio do "caminho".
+
+Agora que vimos alguns exemplos de modelos de busca informada, é interessante explorarmos um exemplo para aprofundar o entendimento:
+
+**Exemplo:** Suponha que temos um jogo de tabuleiro, e esse jogo seja xadrez, jogos de tabuleiro como xadrez costumam ter a necessidade de bastante planejamento para as jogadas, avaliando as possíveis situações e resultados que as ações podem causar. Com essa ideia em mente, seria possível aplicarmos um algoritmo de busca informada para jogar xadrez, basta entendermos que em um jogo de xadrez o agente iria possuir diversas informações sobre o ambiente em que está atuando, poderia planejar jogadas baseadas nas jogadas do seu oponente, nas posições das peças, entre outros diversos dados que iria possuir. Deste modo a aplicação de um algoritmo como o RBFS seria uma boa escolha para este caso, a seguir no *código 4* podemos ver uma versão simplificada da ideia do tabuleiro de xadrez.
+
+````python
+import chess
+
+def heuristic(board):
+    """Avalia o tabuleiro com base no material de cada lado."""
+    piece_values = {
+        chess.PAWN: 1,
+        chess.KNIGHT: 3,
+        chess.BISHOP: 3,
+        chess.ROOK: 5,
+        chess.QUEEN: 9,
+        chess.KING: 1000
+    }
+    score = 0
+    for piece_type in piece_values:
+        score += len(board.pieces(piece_type, chess.WHITE)) * piece_values[piece_type]
+        score -= len(board.pieces(piece_type, chess.BLACK)) * piece_values[piece_type]
+    return score
+
+def rbfs(board, depth, alpha, beta, is_white):
+    """
+    Recursive Best-First Search (RBFS) para o xadrez.
+    - board: o tabuleiro atual.
+    - depth: a profundidade máxima de busca.
+    - alpha, beta: os limites alfa-beta.
+    - is_white: indica se é o turno do jogador branco.
+    """
+    if board.is_checkmate():
+        return float('inf') if is_white else float('-inf'), None
+    if board.is_stalemate() or board.is_insufficient_material() or depth == 0:
+        return heuristic(board), None
+
+    best_score = float('-inf') if is_white else float('inf')
+    best_move = None
+
+    for move in board.legal_moves:
+        board.push(move)
+        score, _ = rbfs(board, depth - 1, alpha, beta, not is_white)
+        board.pop()
+
+        if is_white:
+            if score > best_score:
+                best_score, best_move = score, move
+            alpha = max(alpha, score)
+        else:
+            if score < best_score:
+                best_score, best_move = score, move
+            beta = min(beta, score)
+
+        if beta <= alpha:
+            break
+
+    return best_score, best_move
+
+# Configuração inicial do tabuleiro
+board = chess.Board()
+
+# Simulação de uma jogada usando RBFS
+depth = 3  # Profundidade de busca limitada
+is_white_turn = True
+score, move = rbfs(board, depth, float('-inf'), float('inf'), is_white_turn)
+
+print("Melhor movimento sugerido:", move)
+if move:
+    board.push(move)
+    print(board)
+````
+<figcaption align="center"><b>Código 4</b>: Implementação do algoritmo de busca RBFS aplicada ao exemplo anterior, Fonte: OPENAI. Assistente Virtual ChatGPT, 2024</figcaption>
 
 ## Busca em ambientes complexos
-### Algoritmo desenvolvido de busca em ambientes complexos
+Até o presente momento, vimos diversos algoritmos de buscas sistemáticos que se preocupavam em alcançar o seu objetivo descobrindo um caminho para chegar nele, mas agora, iremos ver um outro modelo de busca, que atuam em ambientes complexos, onde a preocupação não será o caminho para chegar, mas sim se os estados atuais estão de acordo com o objetivo.
 
-## Expansão do uso de algoritmos de busca
+Um dos modelos de busca que atua dentro de ambientes complexos, é o de busca local, esse algoritmo não se preocupa com estados anteriores, ou seja, não grava a rota percorrida, economizando memória, ele se foca somente no estado atual, analisando e se deslocando para os estados vizinhos em preocupação com os estados anteriores. Uma das grandes vantagens da busca local, além de economizar memória e atuarem muito bem em grandes ou infinitos ambientes, eles também ajudam a resolver problemas de otimização, nos quais o objetivo é encontrar o melhor estado de acordo com a função objetivo (RUSSEL; NORVIG, 2010).
 
-## Algoritmos genéticos.
-### Exemplo de uso de algoritmos geneticos diferentes
+Neste ambito de busca local, podemos observar alguns dos diversos modelos de buscas existes, a seguir iremos entender um pouco mais os algoritmos escolhidos:
 
-## Uso de algoritmos de busca em IA
+* **Busca de Subida de Encosta:** Um dos modelos de busca local mais simples, onde durante o seu processo de busca do objetivo, ele tenta melhorar constantemente e progressivamente a solução atual, ele começa em um estado aleatório ou definido, e durante sua "jornada" sempre tenta escolher o melhor vizinho baseado no valor da função objetivo, onde dependendo do problema pode ser o maior valor ou o menor valor;
+* **Têmpera Simulada:** É um modelo completo mas ineficiente, sua lógica é baseada em movimentos "aleatórios" onde ele fica em um processo de subida e descida nos valores da função objetivo, se o movimento realizado melhorar a situação do agente, esse movimento sempre será aceito, se não, o modelo irá aceitar o modelo após uma análise na probabilidade de melhora;
+* **Busca em Feixe Local:** Este modelo é baseado na busca em largura, mas com um foco diferente, ele busca explorar um número de estados maior em cada nível, e aos invés de explorar todos os nós de um nível, ele seleciona apenas os melhores nós, e com isso limita a quantidade de estados.
+
+Para entendermos melhor como esses algoritmos podem funcionar, vamos trazer um exemplo e a aplicação de um desses modelos para a solução do problema:
+
+**Exemplo:** Imagine que um agente é responsável por fazer a organização de um armazém, ele tem diversos produtos e precisa organizá-los de uma forma otimizada para facilitar o processo de coleta e transporte desse produto, a aplicação de um algoritmo de Subida de Enconsta pode ajudar, onde durante suas análises ele tentará achar a melhor e mais eficiente solução.
+
+A seguir no *código 5*, podemos ver a implementação deste exemplo em python.
+
+````python
+import random
+
+# Função que calcula a distância total percorrida para pegar todos os produtos (simulação simples)
+def calcular_distancia(arranjo):
+    # Aqui a distância é simplesmente a soma das distâncias entre produtos consecutivos
+    distancia = 0
+    for i in range(len(arranjo) - 1):
+        distancia += abs(arranjo[i] - arranjo[i+1])  # Distância entre posições consecutivas
+    return distancia
+
+# Função para gerar um estado vizinho (movendo dois produtos de lugar)
+def gerar_vizinho(arranjo):
+    novo_arranjo = arranjo[:]
+    i, j = random.sample(range(len(arranjo)), 2)  # Seleciona dois índices aleatórios
+    novo_arranjo[i], novo_arranjo[j] = novo_arranjo[j], novo_arranjo[i]  # Troca os produtos
+    return novo_arranjo
+
+# Algoritmo de Subida de Encosta (Hill Climbing)
+def subida_de_encosta(arranjo_inicial):
+    estado_atual = arranjo_inicial
+    custo_atual = calcular_distancia(estado_atual)
+    
+    while True:
+        # Gerar um vizinho e calcular seu custo
+        vizinho = gerar_vizinho(estado_atual)
+        custo_vizinho = calcular_distancia(vizinho)
+        
+        # Se o vizinho for melhor (menor custo), mova para ele
+        if custo_vizinho < custo_atual:
+            estado_atual = vizinho
+            custo_atual = custo_vizinho
+        else:
+            # Se não encontrar melhorias, termina o algoritmo
+            break
+            
+    return estado_atual, custo_atual
+
+# Exemplo de uso
+# Inicializando o arranjo de produtos no armazém (ex: posições em um eixo linear)
+arranjo_inicial = [4, 2, 8, 1, 6, 5, 7, 3]
+
+# Rodando o algoritmo de subida de encosta
+melhor_arranjo, custo_final = subida_de_encosta(arranjo_inicial)
+
+# Exibindo o melhor arranjo e o custo final
+print(f"Melhor arranjo encontrado: {melhor_arranjo}")
+print(f"Custo final (distância total): {custo_final}")
+````
+<figcaption align="center"><b>Código 5</b>: Implementação do algoritmo de busca de Subida de Enconsta aplicada ao exemplo anterior, Fonte: OPENAI. Assistente Virtual ChatGPT, 2024</figcaption>
+
+## Algoritmos genéticos
+Os algoritmos genéticos são uma variação da busca em feixe estocástica na qual os estados sucessores são gerados pela combinação de dois estados pais, em vez de serem gerados pela modificação de um único estado (RUSSEL; NORVIG, 2010).
+
+Esses algoritmos genéticos funcionam da seguinte forma, eles possuem um conjunto de estados, onde nesses estados eles avaliam os mais potenciais a resolver a solução, e fazem combinações para gerarem novos estados baseados nos anteriores (como se fosse a reprodução sexuada, por isso algortimo genético). O processo de avaliação é feito baseado em uma função de avaliação que analisa cada estado, fornece um valor para os estados, e em seguida identifica o que aparenta ser a melhor escolha para realizar a combinação.
+
+A seguir, iremos ver um exemplo para podermos absorver a ideia de algoritmos genéticos de forma mais tranquila.
+
+**Exemplo:** Baseado no problema da mochila, pertencente ao "Os 21 problemas NP-completos, que foram introduzidos por Richard Karp em 1972 como forma de demonstrar a aplicabilidade do conceito de NP-completude" (WIKIPEDIA, 2024). Temos uma mochila com peso limitado, e uma série de itens que possuem peso e valor, com isso, temos de selecionar de maneira inteligente, os item de maior valor, sem exceder a capacidade de peso da mochila. O algoritmo irá analisar as combinações possíveis e retornar um resultado para o problema.
+
+Podemos ver a aplicação deste exemplo no *código 6*.
+
+````python
+def knapsack(values, weights, capacity):
+    """
+    Resolve o problema da mochila utilizando programação dinâmica.
+    
+    :param values: Lista dos valores dos itens.
+    :param weights: Lista dos pesos dos itens.
+    :param capacity: Capacidade máxima da mochila.
+    :return: Valor máximo que pode ser colocado na mochila e os itens escolhidos.
+    """
+    n = len(values)
+    # Matriz para armazenar os valores máximos para cada capacidade e número de itens.
+    dp = [[0] * (capacity + 1) for _ in range(n + 1)]
+    
+    # Preenchendo a matriz dp
+    for i in range(1, n + 1):
+        for w in range(1, capacity + 1):
+            if weights[i - 1] <= w:
+                # Inclui o item i-1 ou não
+                dp[i][w] = max(dp[i - 1][w], values[i - 1] + dp[i - 1][w - weights[i - 1]])
+            else:
+                dp[i][w] = dp[i - 1][w]
+    
+    # Determinando os itens escolhidos
+    chosen_items = []
+    w = capacity
+    for i in range(n, 0, -1):
+        if dp[i][w] != dp[i - 1][w]:  # Se o valor mudou, significa que o item foi incluído
+            chosen_items.append(i - 1)
+            w -= weights[i - 1]
+    
+    return dp[n][capacity], chosen_items
+
+
+# Exemplo de uso
+values = [60, 100, 120]  # Valores dos itens
+weights = [10, 20, 30]   # Pesos dos itens
+capacity = 50            # Capacidade máxima da mochila
+
+max_value, items = knapsack(values, weights, capacity)
+
+print("Valor máximo:", max_value)
+print("Itens escolhidos:", items)
+
+````
+<figcaption align="center"><b>Código 6</b>: Implementação do algoritmo de busca genética aplicada ao exemplo anterior, Fonte: OPENAI. Assistente Virtual ChatGPT, 2024</figcaption>
 
 ## Conclusão
+Baseado em tudo que estudamos neste artigo, foi possível entender diversos tópicos importantes para o entendimento sobre a solução de problemas por buscas, conseguimos obter um entendimento sobre como agentes atuam através de diferentes modelos de busca, desde buscas sistemáticas, até buscas em ambientes complexos, com exemplos claros de sua utilização e aplicação em linguagem python. Por fim aprofundamos nosso assunto de busca em um conceito importante que é a busca por algoritmo genético que tem suas aplicações em diversos setores importantes.
 
 ## Referências
 
 > [1] RUSSELL, Stuart; NORVIG, Peter. *Inteligência Artificial: Uma Abordagem Moderna* – 3ª edição.  
-> [2] OPENAI. Assistente Virtual ChatGPT. Respostas geradas com base em inteligência artificial. Disponível em: https://openai.com. Acesso em: 24 dez. 2024.
+> [2] OPENAI. Assistente Virtual ChatGPT. Respostas geradas com base em inteligência artificial. Disponível em: https://openai.com. Acesso em: 24 dez. 2024.  
+> [3] WIKIPEDIA. 21 problemas NP-completos de Karp. Disponível em: https://pt.wikipedia.org/wiki/21_problemas_NP-completos_de_Karp. Acesso em: 29 dez. 2024.
